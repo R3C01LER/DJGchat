@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scaldrone Chat Example</title>
+</head>
+<body>
+	<h1>Scaldrone Chat Example</h1>
+	<div id="messages"></div>
+	<form id="message-form">
+		<input type="text" id="message-input">
+		<button type="submit">Send</button>
+	</form>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.scaldr.com/js/scaldrone-client.js"></script>
+	<script>
+		const channelId = "ULEFc6b6MxmGhypc";
+		const client = new ScaldroneClient();
+		const messageForm = document.querySelector('#message-form');
+		const messageInput = document.querySelector('#message-input');
+		const messagesContainer = document.querySelector('#messages');
+
+		client.connect(channelId);
+
+		client.on('message', message => {
+			const messageElement = document.createElement('div');
+			messageElement.innerText = message.text;
+			messagesContainer.appendChild(messageElement);
+		});
+
+		messageForm.addEventListener('submit', event => {
+			event.preventDefault();
+			const message = messageInput.value;
+			if (message !== '') {
+				client.sendMessage(channelId, message);
+				messageInput.value = '';
+			}
+		});
+	</script>
+</body>
+</html>
